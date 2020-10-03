@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:top_stories/components/article_card.dart';
+import 'package:top_stories/features/articles/article_card.dart';
 import 'package:top_stories/components/custom_scaffold.dart';
 import 'package:top_stories/core/core.dart';
 
@@ -35,6 +35,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         stream: _controller.combinedStream,
         builder: (context, snapshot) {
           return CustomScaffold(
+            onRetry: _init,
             pageState: _controller.pageState,
             body: SafeArea(
               child: RefreshIndicator(

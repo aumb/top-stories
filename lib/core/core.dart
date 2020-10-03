@@ -20,7 +20,9 @@ export 'enums/page_state.dart';
 
 //Controllers
 export 'controllers/articles_controller.dart';
+export 'controllers/boomark_controller.dart';
 export 'controllers/article_controller.dart';
+export 'controllers/home_controller.dart';
 
 //Services
 export 'services/articles_service.dart';

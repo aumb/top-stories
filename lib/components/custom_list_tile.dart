@@ -10,6 +10,9 @@ class CustomListTile extends StatelessWidget {
   ///Leading icon for this list tile
   final IconData icon;
 
+  ///Use to set the color of the icon
+  final Color iconColor;
+
   ///Trailing widget for this list tile
   final Widget trailing;
 
@@ -23,13 +26,14 @@ class CustomListTile extends StatelessWidget {
     this.icon,
     this.trailing,
     this.onTap,
+    this.iconColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24.0),
-      leading: icon != null ? Icon(icon) : null,
+      leading: icon != null ? Icon(icon, color: iconColor) : null,
       subtitle: subtitle != null ? Text(subtitle) : null,
       title: title != null ? Text(title) : title,
       trailing: trailing,
