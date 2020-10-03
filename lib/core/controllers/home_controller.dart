@@ -1,6 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 
 class HomeController {
+  ///Keeps track of the current bottom tab item selected
   BehaviorSubject<int> _currentIndex;
 
   HomeController() {

@@ -20,6 +20,7 @@ class CustomScaffold extends StatelessWidget {
     );
   }
 
+  ///Checks on the current state and builds the body based on the state.
   Widget _buildBodyAccordingToState(BuildContext context) {
     Widget pageBody = SizedBox.shrink();
     switch (pageState) {
