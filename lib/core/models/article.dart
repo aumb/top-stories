@@ -4,6 +4,9 @@ class Article {
   ///Title of the article
   String title;
 
+  ///Section of the article
+  String section;
+
   ///Abstract text of the article
   String abstractText;
 
@@ -21,6 +24,7 @@ class Article {
 
   Article({
     this.title,
+    this.section,
     this.abstractText,
     this.url,
     this.updatedDate,
@@ -33,6 +37,7 @@ class Article {
     if (json != null) {
       return Article(
         title: json['title'] != null ? json['title'] : null,
+        section: json['section'] != null ? json['section'] : null,
         abstractText: json['abstract'] != null ? json['abstract'] : null,
         url: json['url'] != null ? json['url'] : null,
         updatedDate: json['updated_date'] != null
