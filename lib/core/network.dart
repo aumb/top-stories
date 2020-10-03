@@ -44,7 +44,7 @@ class Network {
 
   ///Setting up the initial query parameters and the client with its options
   void _setUpDio() {
-    queryParameters['key'] = API.KEY;
+    queryParameters['api-key'] = API.KEY;
     _client = Dio(options);
   }
 }
