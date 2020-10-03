@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///A helper function that takes a date parameter and an optional pattern parameter.
 ///If the date is null the fucntion returns null, and if the pattern is null the
@@ -27,4 +28,24 @@ String getStrDate(DateTime date, {String pattern}) {
   }
 
   return formattedDate;
+}
+
+/// Returns [true] if [s] is either null or empty.
+bool isEmpty(String s) => s == null || s.isEmpty || s == 'null';
+
+/// Returns [true] if [s] is a not null or empty string.
+bool isNotEmpty(String s) => s != null && s.isNotEmpty && s != 'null';
+
+///Launches custom urls. If the path is html no need to encode to uri.
+void launchUrls({String scheme, String path}) {
+  if (scheme == "https" || scheme == "http") {
+    launch(path);
+    return;
+  }
+  final Uri uri = Uri(
+    scheme: scheme,
+    path: path,
+  );
+
+  launch(uri.toString());
 }
