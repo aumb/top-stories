@@ -12,6 +12,7 @@ class ArticleMultimedia {
     this.imageSize,
   });
 
+  ///Create an article multimedia from a json map
   factory ArticleMultimedia.fromJson(Map<String, dynamic> json) {
     if (json != null) {
       return ArticleMultimedia(
@@ -24,6 +25,7 @@ class ArticleMultimedia {
     }
   }
 
+  ///Create an article multimedia list from a json map
   static List<ArticleMultimedia> fromJsonList(List json) {
     if (json != null && json.isNotEmpty) {
       List<ArticleMultimedia> multimedia = json
@@ -33,5 +35,19 @@ class ArticleMultimedia {
     } else {
       return [];
     }
+  }
+
+  ///Covert an article multimedia to json
+  Map<String, dynamic> toJson() => {
+        'url': url,
+        'format': imageSize?.value,
+      };
+
+  ///Covert a list of article multimedias to json
+  static List<Map<String, dynamic>> toJsonList(
+      List<ArticleMultimedia> multimedia) {
+    List<Map<String, dynamic>> json =
+        multimedia.map((multimedia) => multimedia.toJson()).toList();
+    return json;
   }
 }

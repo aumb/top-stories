@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:top_stories/components/bottom_navigation_bar.dart';
-import 'package:top_stories/core/controllers/home_controller.dart';
 import 'package:top_stories/core/core.dart';
 import 'package:top_stories/features/articles/articles_screen.dart';
 import 'package:top_stories/features/bookmarks/bookmarks_screen.dart';
@@ -21,7 +20,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Network().init();
+    BookmarkController().getBookmarkedArticles();
     _controller = HomeController();
+  }
+
+  ///Dispose of the streams
+  @override
+  void dispose() {
+    _controller.dispose();
+    BookmarkController().dispose();
+    super.dispose();
   }
 
   @override
@@ -29,10 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return StreamBuilder<int>(
         stream: _controller.currentIndexStream,
         builder: (context, snapshot) {
-          return Scaffold(
-            bottomNavigationBar: _buildBottomNavigationBar(),
-            body: _bottomNavigationItems[_controller.currentIndex],
-          );
+          return StreamBuilder<List<Article>>(
+              stream: BookmarkController().articlesStream,
+              builder: (context, snapshot) {
+                return Scaffold(
+                  bottomNavigationBar: _buildBottomNavigationBar(),
+                  body: _bottomNavigationItems[_controller.currentIndex],
+                );
+              });
         });
   }
 

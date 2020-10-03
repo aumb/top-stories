@@ -13,9 +13,6 @@ class Article {
   ///Url of the article
   String url;
 
-  ///Last time the article was updated
-  DateTime updatedDate;
-
   ///Publishing date of the aricle
   DateTime publishedDate;
 
@@ -27,7 +24,6 @@ class Article {
     this.section,
     this.abstractText,
     this.url,
-    this.updatedDate,
     this.publishedDate,
     this.articleMultimedia,
   });
@@ -40,9 +36,6 @@ class Article {
         section: json['section'] != null ? json['section'] : null,
         abstractText: json['abstract'] != null ? json['abstract'] : null,
         url: json['url'] != null ? json['url'] : null,
-        updatedDate: json['updated_date'] != null
-            ? DateTime.tryParse(json['updated_date'])
-            : null,
         publishedDate: json['published_date'] != null
             ? DateTime.tryParse(json['published_date'])
             : null,
@@ -64,5 +57,22 @@ class Article {
     } else {
       return [];
     }
+  }
+
+  ///Convert an article to json
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'section': section,
+        'abstract': abstractText,
+        'url': url,
+        'published_date': publishedDate?.toString(),
+        'multimedia': ArticleMultimedia.toJsonList(articleMultimedia),
+      };
+
+  ///Convert a list of articles to json
+  static List<Map<String, dynamic>> toJsonList(List<Article> articles) {
+    List<Map<String, dynamic>> json =
+        articles.map((article) => article.toJson()).toList();
+    return json;
   }
 }
