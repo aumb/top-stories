@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CustomListTile extends StatelessWidget {
+  ///Title displayed for the list tile
   final String title;
+
+  ///Subtitle displayed for this list tile
   final String subtitle;
+
+  ///Leading icon for this list tile
   final IconData icon;
+
+  ///Trailing widget for this list tile
   final Widget trailing;
+
+  ///Callback for list tile tapping
   final Function onTap;
 
   const CustomListTile({

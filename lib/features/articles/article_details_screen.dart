@@ -61,6 +61,7 @@ class ArticleDetailsScreen extends StatelessWidget {
     );
   }
 
+  ///Build bookmark list tile
   Widget _buildBookmark(BuildContext context) {
     return CustomListTile(
       icon: Icons.bookmark,
@@ -68,10 +69,12 @@ class ArticleDetailsScreen extends StatelessWidget {
     );
   }
 
+  ///Build full article list tile
   Widget _buildGoToArticle(BuildContext context) {
     return CustomListTile(
       icon: Icons.web,
       title: Strings.fullArticle,
+      onTap: () => launchUrls(scheme: 'https', path: article.url),
     );
   }
 
@@ -86,6 +89,7 @@ class ArticleDetailsScreen extends StatelessWidget {
     );
   }
 
+  ///Build article's abstract
   Widget _buildArticleAbstract() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),

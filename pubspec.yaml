@@ -33,6 +33,7 @@ dependencies:
   logger: ^0.9.4
   intl: ^0.16.1
   cached_network_image: ^2.0.0-rc
+  url_launcher: ^5.7.2
 
 dev_dependencies:
   flutter_test:
