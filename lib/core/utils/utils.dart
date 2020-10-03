@@ -28,3 +28,9 @@ String getStrDate(DateTime date, {String pattern}) {
 
   return formattedDate;
 }
+
+/// Returns [true] if [s] is either null or empty.
+bool isEmpty(String s) => s == null || s.isEmpty || s == 'null';
+
+/// Returns [true] if [s] is a not null or empty string.
+bool isNotEmpty(String s) => s != null && s.isNotEmpty && s != 'null';

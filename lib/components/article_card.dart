@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:top_stories/core/core.dart';
+import 'package:top_stories/features/articles/article_details_screen.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
@@ -21,14 +22,21 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          _buildImage(),
-          _buildArticleCategoryAndDate(),
-          _buildArticleTitle(context),
-          SizedBox(height: 16),
-        ],
+    return InkWell(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) => ArticleDetailsScreen(article),
+        ),
+      ),
+      child: Card(
+        child: Column(
+          children: [
+            _buildImage(),
+            _buildArticleCategoryAndDate(),
+            if (isNotEmpty(article.title)) _buildArticleTitle(context),
+            if (isNotEmpty(article.title)) SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
@@ -78,19 +86,27 @@ class ArticleCard extends StatelessWidget {
                 topLeft: Radius.circular(5), topRight: Radius.circular(5)),
             child: (article?.articleMultimedia != null &&
                     article.articleMultimedia.isNotEmpty)
-                ? CachedNetworkImage(
-                    height: 200,
-                    fit: BoxFit.cover,
-                    imageUrl: imageUrl,
-                    placeholder: (BuildContext context, String string) =>
-                        Image.asset(Images.placeholder, height: 200),
+                ? AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: imageUrl,
+                      placeholder: (BuildContext context, String string) =>
+                          AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Image.asset(
+                                Images.placeholder,
+                              )),
+                    ),
                   )
-                : Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          Images.placeholder,
+                : AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            Images.placeholder,
+                          ),
                         ),
                       ),
                     ),
