@@ -7,14 +7,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ArticlesController _controller;
+
   @override
   void initState() {
     super.initState();
     Network().init();
+    _controller = ArticlesController();
+    _controller.getArticles();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return StreamBuilder<bool>(
+        stream: _controller.combinedStream,
+        builder: (context, snapshot) {
+          return Scaffold();
+        });
   }
 }
