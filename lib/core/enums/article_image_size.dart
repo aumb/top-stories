@@ -9,10 +9,10 @@ class ArticleImageSize extends Enum {
 
   static const List<ArticleImageSize> values = [
     extraLarge,
-    small,
     large,
     medium,
     normal,
+    small,
   ];
 
   ///Pass value to be retrieved to constructor
