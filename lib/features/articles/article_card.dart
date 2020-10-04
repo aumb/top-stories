@@ -37,12 +37,15 @@ class _ArticleCardState extends State<ArticleCard> {
         stream: _controller.refreshStream,
         builder: (context, snapshot) {
           return InkWell(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    ArticleDetailsScreen(widget.article),
-              ),
-            ),
+            onTap: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      ArticleDetailsScreen(widget.article),
+                ),
+              );
+              _controller.refresh = true;
+            },
             child: Card(
               child: Column(
                 children: [

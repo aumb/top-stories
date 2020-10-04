@@ -47,7 +47,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     );
   }
 
-  ///Builds the bookmarked articles grid
   SliverGrid _buildArticlesGrid() {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -70,7 +69,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     );
   }
 
-  ///Build the title at the top of the articles page
   SliverToBoxAdapter _buildTitle() {
     return SliverToBoxAdapter(
         child: TitleWidget(
