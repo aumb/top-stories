@@ -1,9 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
 import 'package:top_stories/core/core.dart';
 
 class StorageManager {
+  Logger _storageLogger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   _MobileStorage storage;
 
   StorageManager() {
@@ -20,7 +25,7 @@ class StorageManager {
     for (var article in articles) {
       _articles.add(article);
     }
-    print(Article.toJsonList(_articles));
+    _storageLogger.d(Article.toJsonList(_articles));
     return storage.setJson('articles', Article.toJsonList(_articles));
   }
 
@@ -34,13 +39,17 @@ class StorageManager {
 class _MobileStorage {
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
+  Logger _mobileStorageLogger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   ///Write a key value pair to the database
   Future<bool> setString(String key, String value) async {
     try {
       await storage.write(key: key, value: value);
       return true;
     } catch (e) {
-      print(e);
+      _mobileStorageLogger.d(e);
       return false;
     }
   }

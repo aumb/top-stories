@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:top_stories/core/core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 ///A helper function that takes a date parameter and an optional pattern parameter.
@@ -48,4 +49,16 @@ void launchUrls({String scheme, String path}) {
   );
 
   launch(uri.toString());
+}
+
+///Gets the image for the article multimedia provided
+String getimageUrl(Article article) {
+  ArticleMultimedia media;
+  for (int i = 0; i < ArticleImageSize.values.length; i++) {
+    media = article.articleMultimedia?.firstWhere(
+        (element) => element?.imageSize == ArticleImageSize.values[i]);
+    if (!(media == null)) return media?.url;
+  }
+
+  return media?.url;
 }

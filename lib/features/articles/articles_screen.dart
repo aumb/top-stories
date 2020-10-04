@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:top_stories/components/title_widget.dart';
 import 'package:top_stories/features/articles/article_card.dart';
 import 'package:top_stories/components/custom_scaffold.dart';
 import 'package:top_stories/core/core.dart';
@@ -10,16 +12,22 @@ class ArticlesScreen extends StatefulWidget {
 
 class _ArticlesScreenState extends State<ArticlesScreen> {
   ArticlesController _controller;
+  DefaultCacheManager _cniManager;
 
   @override
   void initState() {
     super.initState();
+    _cniManager = DefaultCacheManager();
     _controller = ArticlesController();
     _init();
   }
 
   ///Init function
   Future<void> _init({bool isRefresh = false}) {
+    if (isRefresh) {
+      CacheManager().invalidateCacheAndRestart();
+      _cniManager.emptyCache();
+    }
     return _controller.getArticles(isRefresh: isRefresh);
   }
 
@@ -64,15 +72,10 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   }
 
   ///Build the title at the top of the articles page
-  SliverPadding _buildTitle() {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      sliver: SliverToBoxAdapter(
-        child: Text(
-          Strings.topArticles,
-          style: Theme.of(context).textTheme.headline4,
-        ),
-      ),
-    );
+  SliverToBoxAdapter _buildTitle() {
+    return SliverToBoxAdapter(
+        child: TitleWidget(
+      title: Strings.topArticles,
+    ));
   }
 }

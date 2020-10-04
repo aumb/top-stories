@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:top_stories/core/core.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
+  ///The current page selected
   final int currentIndex;
+
+  ///Action on the tap of a tab bar item
   final Function(int value) onTap;
 
   CustomBottomNavigationBar({
@@ -21,7 +24,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           title: Text(Strings.articles),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark_border),
+          icon: Icon(Icons.bookmark),
           title: Text(Strings.bookmarks),
         ),
       ],

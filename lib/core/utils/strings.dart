@@ -10,8 +10,9 @@ class Strings {
   static final String fullArticle = "View full article";
   static final String yourBookmarks = "Your Bookmarks";
   static final String removeBookmark = "Remove Bookmark";
-  static final String removedBookmark = "Removed Bookmark";
+  static final String removedBookmark = "Removed bookmark";
   static final String undo = "Undo";
   static final String addedToBookmarks = "Added to bookmarks";
   static final String bookmarkError = "Unable to add bookmark";
+  static final String noBookmarks = "You have not bookmarked any article";
 }

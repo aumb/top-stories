@@ -14,6 +14,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: TextTheme(
+          headline4: TextStyle(
+            color: Colors.black87,
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.bold,
+            fontSize: 26,
+          ),
+        ),
       ),
       home: HomeScreen(),
     );

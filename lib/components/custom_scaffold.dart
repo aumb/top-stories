@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:top_stories/core/core.dart';
 
 class CustomScaffold extends StatelessWidget {
+  ///Use to track the current state of the page
   final PageState pageState;
+
+  ///The main body of the page
   final Widget body;
+
+  ///If the page state is `noData` or `error` this function is called on the retry button
   final Function onRetry;
 
+  final Key key;
+
   const CustomScaffold({
-    Key key,
+    this.key,
     this.pageState,
     this.body,
     this.onRetry,
@@ -16,6 +23,7 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: key,
       body: _buildBodyAccordingToState(context),
     );
   }
@@ -28,7 +36,11 @@ class CustomScaffold extends StatelessWidget {
         pageBody = _LoadingWidget();
         break;
       case PageState.loaded:
-        pageBody = body;
+        pageBody = AnimatedOpacity(
+          opacity: 1,
+          duration: Duration(milliseconds: 600),
+          child: body,
+        );
         break;
       case PageState.error:
         pageBody = _ErrorWidget(

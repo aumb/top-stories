@@ -24,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _controller = HomeController();
   }
 
-  ///Dispose of the streams
   @override
   void dispose() {
     _controller.dispose();

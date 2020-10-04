@@ -3,25 +3,25 @@ import 'package:top_stories/core/core.dart';
 
 class ArticleController {
   final Article article;
-  BehaviorSubject<bool> _isLoading;
+  BehaviorSubject<bool> _refresh;
 
   ArticleController(this.article) {
-    _isLoading = BehaviorSubject<bool>.seeded(false);
+    _refresh = BehaviorSubject<bool>.seeded(false);
   }
 
   //Stream getters
-  Observable<bool> get isLoadingStream => _isLoading.stream;
+  Stream<bool> get refreshStream => _refresh.stream;
 
   //Value getters
-  bool get isLoading => _isLoading.value;
+  bool get refresh => _refresh.value;
 
   //Value setters
-  set isLoading(bool value) {
-    if (!_isLoading.isClosed) _isLoading.add(value);
+  set refresh(bool value) {
+    if (!_refresh.isClosed) _refresh.add(value);
   }
 
   ///Check if the article is bookmarked
-  bool isFavorite() {
+  bool isBookmarked() {
     bool isFavorite = false;
     Article _article = BookmarkController().articles.firstWhere(
         (element) => element.url == article.url,
@@ -33,6 +33,6 @@ class ArticleController {
   }
 
   void dispose() {
-    if (!_isLoading.isClosed) _isLoading.close();
+    if (!_refresh.isClosed) _refresh.close();
   }
 }

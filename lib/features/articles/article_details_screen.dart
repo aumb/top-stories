@@ -1,6 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:top_stories/components/custom_cached_network_image.dart';
 import 'package:top_stories/components/custom_list_tile.dart';
+import 'package:top_stories/components/image_placeholder_widget.dart';
+import 'package:top_stories/components/section_date_widget.dart';
 import 'package:top_stories/core/core.dart';
 
 class ArticleDetailsScreen extends StatefulWidget {
@@ -31,120 +33,86 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
     super.dispose();
   }
 
+  bool get isBookmarked => _controller.isBookmarked();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-        stream: _controller.isLoadingStream,
+        stream: _controller.refreshStream,
         builder: (context, snapshot) {
           return Scaffold(
             key: _scaffoldKey,
-            body: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  automaticallyImplyLeading: true,
-                  pinned: true,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: _buildImage(),
+            body: SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    automaticallyImplyLeading: true,
+                    pinned: true,
+                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: _buildImage(),
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildArticleCategoryAndDate(),
-                ),
-                if (isNotEmpty(widget.article.title))
                   SliverToBoxAdapter(
-                    child: _buildArticleTitle(),
+                    child: SectionAndDateWidget(article: widget.article),
                   ),
-                if (isNotEmpty(widget.article.title))
+                  if (isNotEmpty(widget.article.title))
+                    SliverToBoxAdapter(
+                      child: _buildArticleTitle(),
+                    ),
+                  if (isNotEmpty(widget.article.title))
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: 16),
+                    ),
                   SliverToBoxAdapter(
-                    child: SizedBox(height: 16),
+                    child: _buildArticleAbstract(),
                   ),
-                SliverToBoxAdapter(
-                  child: _buildArticleAbstract(),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildBookmark(),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildGoToArticle(),
-                ),
-              ],
+                  SliverToBoxAdapter(
+                    child: _buildBookmark(),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _buildGoToArticle(),
+                  ),
+                ],
+              ),
             ),
           );
         });
   }
 
-  ///Getter for the image url, iterates over the article image options and returns the first non-null one
-  String get imageUrl {
-    ArticleMultimedia media;
-    for (int i = 0; i < ArticleImageSize.values.length; i++) {
-      media = widget.article.articleMultimedia?.firstWhere(
-          (element) => element?.imageSize == ArticleImageSize.values[i]);
-      if (!(media == null)) return media?.url;
-    }
-
-    return media?.url;
-  }
-
-  ///Getter for checking if the article is bookmarked
-  bool get isFavorite => _controller.isFavorite();
-
-  ///Build bookmark list tile
   Widget _buildBookmark() {
     return CustomListTile(
-        icon: Icons.bookmark,
-        iconColor: isFavorite ? Color.fromRGBO(237, 155, 0, 1) : null,
-        title: isFavorite ? Strings.removeBookmark : Strings.bookmark,
-        onTap: () async {
-          final SnackBar snackBar = _buildSnackBar();
-
-          _controller.isLoading = true;
-          isFavorite
-              ? await BookmarkController()
-                  .removeBookmarkedArticle(widget.article)
-              : await BookmarkController().bookmarkArticle(widget.article);
-          _controller.isLoading = false;
-
-          _scaffoldKey.currentState.showSnackBar(snackBar);
-        });
+      icon: Icons.bookmark,
+      iconColor: isBookmarked ? Color.fromRGBO(237, 155, 0, 1) : null,
+      title: isBookmarked ? Strings.removeBookmark : Strings.bookmark,
+      onTap: () async => await toggleBookmark(),
+    );
   }
 
-  ///Builds a snackbar depending on the state of the bookmarking. If the bookmarking succeeds
-  ///A success snackbar is displayed with the option to undo, if it does not succeed an snackbar
-  ///is displayed with an option to retry
+  ///Builds a snackbar depending on the state of the bookmarking.
   SnackBar _buildSnackBar() {
     if (BookmarkController().pageState == PageState.error) {
       return SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(Strings.bookmarkError),
         action: SnackBarAction(
-            label: Strings.retry,
-            onPressed: () async {
-              _controller.isLoading = true;
-              isFavorite
-                  ? await BookmarkController()
-                      .removeBookmarkedArticle(widget.article)
-                  : await BookmarkController().bookmarkArticle(widget.article);
-              _controller.isLoading = false;
-            }),
+          label: Strings.retry,
+          onPressed: () async => await toggleBookmark(),
+        ),
       );
     } else {
       return SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(
-            isFavorite ? Strings.removedBookmark : Strings.addedToBookmarks),
+            !isBookmarked ? Strings.removedBookmark : Strings.addedToBookmarks),
         action: SnackBarAction(
-            label: Strings.undo,
-            onPressed: () {
-              _controller.isLoading = true;
-              isFavorite
-                  ? BookmarkController().removeBookmarkedArticle(widget.article)
-                  : BookmarkController().bookmarkArticle(widget.article);
-              _controller.isLoading = false;
-            }),
+          label: Strings.undo,
+          onPressed: () async => await toggleBookmark(),
+        ),
       );
     }
   }
 
-  ///Build full article list tile
   Widget _buildGoToArticle() {
     return CustomListTile(
       icon: Icons.web,
@@ -153,7 +121,6 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
     );
   }
 
-  ///Builds the article's title
   Padding _buildArticleTitle() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -164,7 +131,6 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
     );
   }
 
-  ///Build article's abstract
   Widget _buildArticleAbstract() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -172,54 +138,32 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
     );
   }
 
-  ///Builds the article's category and date
-  Padding _buildArticleCategoryAndDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(widget.article.section?.toUpperCase()),
-          Text(
-            getStrDate(widget.article.publishedDate,
-                pattern: 'MMMM yy hh:mm a'),
-            style: TextStyle(fontWeight: FontWeight.w300),
-          )
-        ],
-      ),
-    );
-  }
-
-  ///Builds the image for the article, if the image is null a placeholder takes its place
   Row _buildImage() {
     return Row(
       children: [
         Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+          child: Hero(
+            tag: 'article_picture_${widget.article.url}',
             child: (widget.article?.articleMultimedia != null &&
                     widget.article.articleMultimedia.isNotEmpty)
-                ? CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: imageUrl,
-                    placeholder: (BuildContext context, String string) =>
-                        Image.asset(
-                      Images.placeholder,
-                    ),
-                  )
-                : Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          Images.placeholder,
-                        ),
-                      ),
-                    ),
-                  ),
+                ? CustomCachedNetworkImage(getimageUrl(widget.article))
+                : ImagePlaceholderWidget(),
           ),
         ),
       ],
     );
+  }
+
+  ///If the bookmarking succeeds. A success snackbar is displayed with the option to undo
+  ///if it does not succeed an snackbar is displayed with an option to retry
+  toggleBookmark() async {
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    isBookmarked
+        ? await BookmarkController().removeBookmarkedArticle(widget.article)
+        : await BookmarkController().bookmarkArticle(widget.article);
+
+    final SnackBar snackBar = _buildSnackBar();
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+    _controller.refresh = true;
   }
 }
