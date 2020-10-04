@@ -27,7 +27,6 @@ class Network {
     String path, {
     ResponseType responseType,
     Map<String, String> headers,
-    bool forceRefresh = false,
   }) async {
     //Check if the request is in cache
     CacheManager cacheManager = CacheManager();

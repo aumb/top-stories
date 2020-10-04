@@ -25,6 +25,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   ///Init function
   Future<void> _init({bool isRefresh = false}) {
     if (isRefresh) {
+      //Empty cache when user decides to reload
       CacheManager().invalidateCacheAndRestart();
       _cniManager.emptyCache();
     }
@@ -60,7 +61,6 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         });
   }
 
-  ///Build the list of articles
   SliverList _buildArticlesList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -71,7 +71,6 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
     );
   }
 
-  ///Build the title at the top of the articles page
   SliverToBoxAdapter _buildTitle() {
     return SliverToBoxAdapter(
         child: TitleWidget(

@@ -62,7 +62,8 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   ArticleDetailsScreen(BookmarkController().articles[index]),
             ),
           );
-          setState(() {});
+
+          if (mounted) setState(() {});
         }),
         childCount: BookmarkController().articles?.length,
       ),
