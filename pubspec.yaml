@@ -29,12 +29,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   dio: ^3.0.10
-  rxdart: ^0.21.0
+  rxdart: ^0.24.1
   logger: ^0.9.4
   intl: ^0.16.1
   cached_network_image: ^2.0.0-rc
   url_launcher: ^5.7.2
   flutter_secure_storage: ^3.3.4
+  flutter_cache_manager: ^1.4.2
 
 dev_dependencies:
   flutter_test:
@@ -66,12 +67,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Open Sans
+      fonts:
+        - asset: assets/fonts/OpenSans-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

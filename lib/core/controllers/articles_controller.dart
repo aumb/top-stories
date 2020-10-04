@@ -1,7 +1,12 @@
+import 'package:logger/logger.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:top_stories/core/core.dart';
 
 class ArticlesController {
+  Logger _articlesControllerLogger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   ///Used for displaying the application loader
   BehaviorSubject<PageState> _pageState;
 
@@ -19,11 +24,11 @@ class ArticlesController {
   }
 
   //Stream getters
-  Observable<PageState> get pageStateStream => _pageState.stream;
-  Observable<Articles> get articlesStream => _articles.stream;
+  Stream<PageState> get pageStateStream => _pageState.stream;
+  Stream<Articles> get articlesStream => _articles.stream;
 
   //Stream Combiners
-  Observable<bool> get combinedStream => Observable.combineLatest2(
+  Stream<bool> get combinedStream => Rx.combineLatest2(
         pageStateStream,
         articlesStream,
         (a, b) => true,
@@ -53,7 +58,7 @@ class ArticlesController {
       articles = value;
       if (!isRefresh) pageState = PageState.loaded;
     }).catchError((e) {
-      print(e);
+      _articlesControllerLogger.e(e);
       if (!isRefresh) pageState = PageState.error;
     });
   }

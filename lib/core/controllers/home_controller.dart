@@ -9,7 +9,7 @@ class HomeController {
   }
 
   //Stream getters
-  Observable<int> get currentIndexStream => _currentIndex.stream;
+  Stream<int> get currentIndexStream => _currentIndex.stream;
 
   //Value getters
   int get currentIndex => _currentIndex.value;

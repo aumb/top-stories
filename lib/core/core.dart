@@ -12,6 +12,7 @@ export 'utils/utils.dart';
 export 'models/articles.dart';
 export 'models/article.dart';
 export 'models/article_multimedia.dart';
+export 'models/cache_object.dart';
 
 //Enums
 export 'enums/enum.dart';
@@ -26,3 +27,7 @@ export 'controllers/home_controller.dart';
 
 //Services
 export 'services/articles_service.dart';
+
+//Manager
+export 'managers/storage_manager.dart';
+export 'managers/cache_manager.dart';

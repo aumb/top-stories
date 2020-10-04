@@ -23,7 +23,7 @@ class BookmarkController {
   }
 
   //Stream getters
-  Observable<List<Article>> get articlesStream => _articles.stream;
+  Stream<List<Article>> get articlesStream => _articles.stream;
 
   //Value getters
   List<Article> get articles => _articles.value;
@@ -83,6 +83,7 @@ class BookmarkController {
   ///Get all the bookmarked articles on the phone
   Future<void> getBookmarkedArticles() {
     return _storageManager.getBookmarks().then((value) {
+      print("got articles");
       articles = [];
       articles.addAll(value);
       articles = articles;

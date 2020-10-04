@@ -8,7 +8,7 @@ class Network {
     printer: PrettyPrinter(),
   );
 
-  ///the client we're using for the network processes
+  ///The client we're using for the network processes
   static Dio _client;
 
   ///Map of query parameters to pass to the client
@@ -18,22 +18,52 @@ class Network {
   static BaseOptions options = new BaseOptions(
     baseUrl: API.host,
     queryParameters: queryParameters,
-    connectTimeout: 5000,
-    receiveTimeout: 5000,
+    connectTimeout: 10000,
+    receiveTimeout: 10000,
   );
 
   ///A modified get function for less code repetitivness
-  static Future<dynamic> get(String path,
-      {ResponseType responseType, Map<String, String> headers}) async {
-    if (responseType != null) {
-      _client.options.responseType = responseType;
-    } else {
-      _client.options.responseType = ResponseType.json;
+  static Future<dynamic> get(
+    String path, {
+    ResponseType responseType,
+    Map<String, String> headers,
+    bool forceRefresh = false,
+  }) async {
+    //Check if the request is in cache
+    CacheManager cacheManager = CacheManager();
+    CacheObject cacheObject = cacheManager.checkIfCached(path);
+
+    //Return the response from cache if it exists
+    if (cacheObject != null) {
+      return cacheObject.cachedResponse;
     }
+
     Response response = await _client.get(path);
-    if (responseType != ResponseType.bytes) {
-      _netowrkLogger.d(response.data);
+
+    //Create the cache object based on the cache-control header. If the time retrieved is less than 60 seconds, hardcode it to 60
+    int cacheTimeSeconds = 0;
+    if (response.headers != null && response.headers['cache-control'] != null) {
+      String cacheControl = response.headers.map['cache-control'].first;
+      int x = int.tryParse(cacheControl.split("=").last);
+      if (x != null) {
+        if (x < 60) {
+          cacheTimeSeconds = 60;
+        } else {
+          cacheTimeSeconds = x;
+        }
+      }
     }
+    var now = new DateTime.now();
+    var validUntil = now.add(Duration(seconds: cacheTimeSeconds));
+    CacheObject newCacheObject = CacheObject(
+      validUntil: validUntil,
+      cachedResponse: response.data,
+    );
+    cacheManager.addToMap(path, newCacheObject);
+
+    //Log the server response
+    _netowrkLogger.d(response.data);
+
     return response.data;
   }
 
