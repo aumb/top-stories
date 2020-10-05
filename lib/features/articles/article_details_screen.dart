@@ -65,15 +65,17 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                     SliverToBoxAdapter(
                       child: SizedBox(height: 16),
                     ),
-                  SliverToBoxAdapter(
-                    child: _buildArticleAbstract(),
-                  ),
+                  if (isNotEmpty(widget.article.abstractText))
+                    SliverToBoxAdapter(
+                      child: _buildArticleAbstract(),
+                    ),
                   SliverToBoxAdapter(
                     child: _buildBookmark(),
                   ),
-                  SliverToBoxAdapter(
-                    child: _buildGoToArticle(),
-                  ),
+                  if (isNotEmpty(widget.article.url))
+                    SliverToBoxAdapter(
+                      child: _buildGoToArticle(),
+                    ),
                 ],
               ),
             ),

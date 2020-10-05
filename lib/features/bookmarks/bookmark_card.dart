@@ -34,12 +34,13 @@ class BookmarkCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildArticleCategory(),
-                _buildArticleDate(context),
+                SizedBox(height: 12),
+                if (isNotEmpty(article.section)) _buildArticleCategory(),
+                if (article.publishedDate != null) _buildArticleDate(context),
                 SizedBox(height: 8),
                 if (isNotEmpty(article.title))
                   Expanded(child: _buildArticleTitle(context)),
-                if (isNotEmpty(article.title)) SizedBox(height: 16),
+                SizedBox(height: 12),
               ],
             ),
           ],
@@ -48,7 +49,6 @@ class BookmarkCard extends StatelessWidget {
     );
   }
 
-  ///Builds the article's title
   Padding _buildArticleTitle(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -60,15 +60,13 @@ class BookmarkCard extends StatelessWidget {
     );
   }
 
-  ///Builds the article's category
   Padding _buildArticleCategory() {
     return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 12),
+      padding: const EdgeInsets.only(left: 24, right: 24, bottom: 12),
       child: Text(article.section?.toUpperCase()),
     );
   }
 
-  ///Builds the article's date
   Padding _buildArticleDate(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -14,14 +14,14 @@ class SectionAndDateWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            article.section?.toUpperCase(),
+            article.section?.toUpperCase() ?? '',
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
                 .copyWith(color: Theme.of(context).accentColor),
           ),
           Text(
-            getStrDate(article.publishedDate, pattern: 'MMMM yy hh:mm a'),
+            getStrDate(article.publishedDate, pattern: 'MMMM yy hh:mm a') ?? '',
             style: TextStyle(fontWeight: FontWeight.w300),
           )
         ],

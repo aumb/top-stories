@@ -54,7 +54,7 @@ class _ArticleCardState extends State<ArticleCard> {
                   if (isNotEmpty(widget.article.title))
                     _buildArticleTitle(context),
                   if (isNotEmpty(widget.article.title)) SizedBox(height: 16),
-                  _buildBookmark(),
+                  _buildActions(),
                 ],
               ),
             ),
@@ -62,7 +62,7 @@ class _ArticleCardState extends State<ArticleCard> {
         });
   }
 
-  Widget _buildBookmark() {
+  Widget _buildActions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
@@ -75,13 +75,14 @@ class _ArticleCardState extends State<ArticleCard> {
               color: isBookmarked ? Color.fromRGBO(237, 155, 0, 1) : null,
             ),
           ),
-          IconButton(
-            onPressed: () =>
-                launchUrls(scheme: 'https', path: widget.article.url),
-            icon: Icon(
-              Icons.web,
+          if (isNotEmpty(widget.article.url))
+            IconButton(
+              onPressed: () =>
+                  launchUrls(scheme: 'https', path: widget.article.url),
+              icon: Icon(
+                Icons.web,
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -90,9 +91,16 @@ class _ArticleCardState extends State<ArticleCard> {
   Padding _buildArticleTitle(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Text(
-        widget.article.title,
-        style: Theme.of(context).textTheme.headline6,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              widget.article.title,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.start,
+            ),
+          ),
+        ],
       ),
     );
   }
